@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "open-sesame",
+  "version": "${project.version}",
+  "name": "Open Sesame",
+  "description": "Open doors together; open sesame!",
+  "authors": [ "Chloe Arkwright" ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/open-sesame",
+    "issues": "https://github.com/chloe-arkwright/open-sesame/issues",
+    "sources": "https://github.com/chloe-arkwright/open-sesame"
+  },
+  "license": "MIT",
+  "icon": "assets/open-sesame/icon.png",
+  "environment": "*",
+  "mixins": [
+    "open-sesame.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.17.3",
+    "minecraft": ">=1.21.11- <1.21.12-",
+    "java": ">=21"
+  }
+}

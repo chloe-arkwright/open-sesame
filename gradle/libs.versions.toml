@@ -1,0 +1,10 @@
+[versions]
+minecraft = "1.21.11"
+
+[plugins]
+fabric-loom = { id = "fabric-loom", version = "1.14.10" }
+modmuss-publish = { id = "me.modmuss50.mod-publish-plugin", version = "1.1.0" }
+
+[libraries]
+minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
+fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version = "0.17.3" }

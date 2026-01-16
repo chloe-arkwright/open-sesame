@@ -1,17 +1,32 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import kotlin.reflect.KProperty
 
 plugins {
     idea
     `java-library`
-    kotlin("jvm") version "2.3.0"
+    alias(libs.plugins.fabric.loom)
+    alias(libs.plugins.modmuss.publish)
 }
 
-val projectVersion: String by project
-val projectMavenGroup: String by project
-val projectId: String by project
+class NonNullPropertyDelegate(val properties: ExtraPropertiesExtension = project.extra): MutablePropertyDelegate {
+    override fun <T> setValue(receiver: Any?, property: KProperty<*>, value: T) {
+        val name = property.name.replace(Regex("([A-Z])")) { ".${it.value.lowercase()}" }
+
+        properties.set(name, value)
+    }
+
+    override fun <T> getValue(receiver: Any?, property: KProperty<*>): T {
+        val name = property.name.replace(Regex("([A-Z])")) { ".${it.value.lowercase()}" }
+
+        return properties.get(name) as T
+    }
+}; val props = NonNullPropertyDelegate()
+
+val projectVersion: String by props
+val projectGroup: String by props
+val projectId: String by props
 
 version = projectVersion
-group = projectMavenGroup
+group = projectGroup
 
 tasks.wrapper {
     gradleVersion = "9.2.1"
@@ -21,24 +36,39 @@ tasks.wrapper {
 
 base.archivesName = projectId
 
-kotlin {
-    compilerOptions.jvmTarget = JvmTarget.JVM_25
-}
-
 java {
     withSourcesJar()
 
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+dependencies {
+    minecraft(libs.minecraft)
+    mappings(loom.officialMojangMappings())
+    modImplementation(libs.fabric.loader)
 }
 
 tasks {
     withType<JavaCompile> {
-        options.release = 25
+        options.release = 21
     }
 
     jar {
         inputs.property("archivesName", project.base.archivesName)
+        version = "${projectVersion}+${libs.versions.minecraft.get()}"
+
+        from("LICENSE")
+    }
+
+    processResources {
+        inputs.property("project", mapOf(
+            "version" to projectVersion
+        ))
+
+        filesMatching("fabric.mod.json") {
+            expand(inputs.properties)
+        }
     }
 }
 

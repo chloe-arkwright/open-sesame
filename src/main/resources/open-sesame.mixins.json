@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "q1d7n.chloearkwright.opensesame.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "OpenDoorsTogetherMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
