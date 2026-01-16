@@ -32,7 +32,8 @@ public abstract class OpenDoorsTogetherMixin {
             return;
         }
 
-        if (!(neighbourState.getBlock() instanceof DoorBlock)) {
+        //noinspection PointlessBooleanExpression: Honestly just reads nicer
+        if (neighbourState.getBlock() instanceof DoorBlock == false) {
             // Don't check if not being updated by a door block.
             return;
         }
@@ -49,28 +50,27 @@ public abstract class OpenDoorsTogetherMixin {
             return;
         }
 
-        boolean selfIsWood = DoorBlock.isWoodenDoor(state);
-        boolean facingIsWood = DoorBlock.isWoodenDoor(neighbourState);
-        DoubleBlockHalf ownHalf = state.getValue(DoorBlock.HALF);
-        DoubleBlockHalf neighbourHalf = neighbourState.getValue(DoorBlock.HALF);
-        boolean selfIsPowered = state.getValue(DoorBlock.POWERED);
-        boolean neighbourPowered = neighbourState.getValue(DoorBlock.POWERED);
-        DoorHingeSide selfHinge = state.getValue(DoorBlock.HINGE);
         boolean selfIsOpen = state.getValue(DoorBlock.OPEN);
         boolean neighbourIsOpen = neighbourState.getValue(DoorBlock.OPEN);
 
-        if (neighbourHalf == ownHalf && neighbourHinge != selfHinge) { // if we've been updated by an opposite door
-            if (!selfIsPowered) {
-                if (neighbourPowered) {
-                    cir.setReturnValue(cir.getReturnValue().setValue(DoorBlock.OPEN, neighbourIsOpen));
-                } else if (neighbourIsOpen != selfIsOpen) {
-                    if (!facingIsWood && selfIsWood || facingIsWood == selfIsWood) { // if the doors are the same, or we're wooden and the other is iron.
-                        cir.setReturnValue(cir.getReturnValue().setValue(DoorBlock.OPEN, !selfIsOpen));
-                    } else {
-                        cir.setReturnValue(cir.getReturnValue().setValue(DoorBlock.OPEN, false));
-                    }
-                }
-            }
+        if (neighbourIsOpen == selfIsOpen) {
+            return;
+        }
+
+        boolean selfIsPowered = state.getValue(DoorBlock.POWERED);
+        boolean neighbourPowered = neighbourState.getValue(DoorBlock.POWERED);
+
+        if (neighbourPowered && !selfIsPowered) {
+            cir.setReturnValue(cir.getReturnValue().setValue(DoorBlock.OPEN, neighbourIsOpen));
+            return;
+        }
+
+        boolean selfIsWood = DoorBlock.isWoodenDoor(state);
+        boolean neighbourIsWood = DoorBlock.isWoodenDoor(neighbourState);
+
+        if (selfIsWood || !neighbourIsWood) {
+            // if the doors are the same, or we're wooden and the other is iron.
+            cir.setReturnValue(cir.getReturnValue().setValue(DoorBlock.OPEN, neighbourIsOpen));
         }
     }
 
