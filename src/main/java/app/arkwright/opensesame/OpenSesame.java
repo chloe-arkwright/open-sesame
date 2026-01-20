@@ -1,4 +1,4 @@
-package q1d7n.chloearkwright.opensesame;
+package app.arkwright.opensesame;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.DoorBlock;

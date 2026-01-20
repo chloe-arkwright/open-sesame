@@ -1,4 +1,4 @@
-package q1d7n.chloearkwright.opensesame.mixin;
+package app.arkwright.opensesame.mixin;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import q1d7n.chloearkwright.opensesame.OpenSesame;
+import app.arkwright.opensesame.OpenSesame;
 
 import java.util.function.BiConsumer;
 
